@@ -17,11 +17,13 @@ export class SignInPayload {
   @IsNotEmpty()
   @IsString()
   @IsEmail()
+  @MaxLength(255)
   readonly email: string;
 
   @ApiProperty({ required: true })
   @IsNotEmpty()
   @IsString()
+  @MaxLength(20)
   readonly password: string;
 }
 
