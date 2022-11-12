@@ -73,11 +73,11 @@ export class IssueRepository implements Repository<IIssue> {
 
     return this.baseRepository.Model.findAll({
       attributes: [
-        [Sequelize.literal(`DATE("created_at")`), 'date'],
-        [Sequelize.literal(`SUM("score")`), 'total_score'],
-        [Sequelize.literal(`COUNT(*)`), 'total_count'],
+        [Sequelize.fn('DATE', Sequelize.col('created_at')), 'date'],
+        [Sequelize.fn('COUNT', 1), 'total_count'],
+        [Sequelize.fn('SUM', Sequelize.col('score')), 'total_score'],
       ],
-      group: ['date'],
+      group: [Sequelize.fn('DATE', Sequelize.col('created_at')), 'date'],
       where,
     });
   }

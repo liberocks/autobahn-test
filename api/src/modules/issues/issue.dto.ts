@@ -10,12 +10,11 @@ import {
   IsInt,
   IsDateString,
 } from 'class-validator';
-import { Transform } from 'class-transformer';
+import { Type } from 'class-transformer';
 
-import { transformToInt } from 'src/common/utils/transformToInt';
 import { PaginationMeta } from 'src/common/class.ts/pagination';
 
-import { IIssue, IIssueStatistic } from './issue.interface';
+import { IIssue } from './issue.interface';
 import Issue from './issue.model';
 import { IssueStatistic } from './issue.class';
 
@@ -61,18 +60,18 @@ export class GetIssuesQuery {
     default: 10,
     example: 10,
   })
-  @Transform(transformToInt)
-  @IsInt()
   @IsOptional()
+  @IsInt()
+  @Type(() => Number)
   readonly page_size?: number = 10;
 
   @ApiProperty({
     default: 1,
     example: 1,
   })
-  @Transform(transformToInt)
-  @IsInt()
   @IsOptional()
+  @IsInt()
+  @Type(() => Number)
   readonly page?: number = 1;
 
   @ApiProperty({
@@ -123,6 +122,7 @@ export class GetIssuesStatisticsQuery {
   @IsDateString()
   readonly created_at_end_date?: Date;
 }
+
 export class GetIssuesStatisticsRes {
   @ApiProperty({ type: [IssueStatistic] })
   readonly data?: IssueStatistic[];
