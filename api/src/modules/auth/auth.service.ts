@@ -1,6 +1,6 @@
 import { scrypt, randomBytes } from 'crypto';
 import { promisify } from 'util';
-
+import { pick } from 'lodash';
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
@@ -9,7 +9,6 @@ import { UserService } from '../user/user.service';
 
 import { AccessToken, JwtPayload } from './auth.interface';
 import { SignInPayload, SignUpPayload, SignUpRes } from './auth.dto';
-import { pick } from 'lodash';
 
 const scryptAsync = promisify(scrypt);
 

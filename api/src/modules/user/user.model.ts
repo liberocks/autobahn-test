@@ -20,6 +20,11 @@ export class User extends BaseModel<User> implements IUser {
     type: DataType.STRING,
   })
   password: string;
+
+  @Column({
+    type: DataType.BOOLEAN,
+  })
+  is_validated?: boolean;
 }
 
 export default User;

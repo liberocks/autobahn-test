@@ -1,5 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-
 import {
   IsString,
   IsNotEmpty,
@@ -8,6 +7,7 @@ import {
   MinLength,
   Matches,
 } from 'class-validator';
+
 import { IUser } from '../user/user.interface';
 
 import { AccessToken } from './auth.interface';
