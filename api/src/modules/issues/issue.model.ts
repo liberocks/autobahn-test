@@ -14,7 +14,7 @@ export class Issue extends BaseModel<Issue> implements IIssue {
   @Column({
     type: DataType.STRING,
   })
-  description: string;
+  description?: string;
 
   @Column({
     type: DataType.DECIMAL(14, 4),

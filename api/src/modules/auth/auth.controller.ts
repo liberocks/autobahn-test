@@ -48,7 +48,7 @@ export class AuthController {
 
       return result;
     } catch (error) {
-      this.logger.error('@AuthController.signIn:error', error);
+      this.logger.error('@signIn:error', error);
       throw error;
     }
   }
@@ -68,9 +68,9 @@ export class AuthController {
         );
       }
 
-      return this.authService.registerUser(body);
+      return await this.authService.registerUser(body);
     } catch (error) {
-      this.logger.error('@AuthController.signUp:error', error);
+      this.logger.error('@signUp:error', error);
       throw error;
     }
   }
