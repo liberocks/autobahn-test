@@ -36,9 +36,9 @@ export class SignUpPayload {
   @ApiProperty({ required: true })
   @IsNotEmpty()
   @IsString()
-  @MinLength(5)
+  @MinLength(3)
   @MaxLength(64)
-  readonly username: string;
+  readonly name: string;
 
   @ApiProperty({ required: true })
   @IsNotEmpty()
@@ -65,7 +65,7 @@ export class SignUpRes
   readonly email: string;
 
   @ApiProperty({ description: 'User name' })
-  readonly username: string;
+  readonly name: string;
 
   @ApiProperty({ description: 'User creation date' })
   readonly created_at: Date;

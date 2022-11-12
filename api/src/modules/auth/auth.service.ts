@@ -49,7 +49,7 @@ export class AuthService {
     const jwtPayload: JwtPayload = {
       email: user.email,
       sub: user.id,
-      username: user.username,
+      name: user.name,
     };
 
     return {
@@ -60,10 +60,10 @@ export class AuthService {
   async registerUser(payload: SignUpPayload): Promise<SignUpRes> {
     const user = await this.userService.create({
       email: payload.email,
-      username: payload.username,
+      name: payload.name,
       password: await this.hashPassword(payload.password),
     });
 
-    return pick(user, ['email', 'username', 'created_at']);
+    return pick(user, ['email', 'name', 'created_at']);
   }
 }

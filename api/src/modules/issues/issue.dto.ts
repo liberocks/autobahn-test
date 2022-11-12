@@ -6,9 +6,10 @@ import {
   MinLength,
   IsOptional,
   IsNumber,
-  IsPositive,
   IsInt,
   IsDateString,
+  Min,
+  Max,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
@@ -35,8 +36,14 @@ export class CreateIssuePayload {
   @ApiProperty({ required: true })
   @IsNotEmpty()
   @IsNumber()
-  @IsPositive()
+  @Min(0)
+  @Max(100)
   readonly score: number;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsDateString()
+  readonly created_at?: Date;
 }
 
 export class CreateIssueRes

@@ -2,7 +2,7 @@ import { BaseModel } from '../sequelize/sequelize.interface';
 
 export interface UserProperty {
   email: string;
-  username: string;
+  name: string;
   password: string;
   is_validated?: boolean;
 }

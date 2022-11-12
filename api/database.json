@@ -1,4 +1,5 @@
 {
+    "sql-file": true,
     "defaultEnv": "local",
     "local": {
         "driver": "mysql",

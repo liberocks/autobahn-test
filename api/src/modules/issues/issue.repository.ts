@@ -24,6 +24,28 @@ export class IssueRepository implements Repository<IIssue> {
     this.baseRepository = new BaseRepository(Issue);
   }
 
+  protected getCreatedAtRangeQuery(query: {
+    created_at_start_date?: Date;
+    created_at_end_date?: Date;
+  }) {
+    let where: WhereOptions<Issue> = {};
+
+    const { created_at_start_date, created_at_end_date } = query;
+
+    if (created_at_start_date && created_at_end_date) {
+      where[Op.and] = [
+        { created_at: { [Op.gte]: created_at_start_date } },
+        { created_at: { [Op.lte]: created_at_end_date } },
+      ];
+    } else if (created_at_start_date) {
+      where[Op.and] = [{ created_at: { [Op.gte]: created_at_start_date } }];
+    } else if (created_at_end_date) {
+      where[Op.and] = [{ created_at: { [Op.lte]: created_at_end_date } }];
+    }
+
+    return where;
+  }
+
   create(values: Partial<IIssue>, transaction?: Transaction): Promise<IIssue> {
     return this.baseRepository.create(values, transaction);
   }
@@ -39,18 +61,13 @@ export class IssueRepository implements Repository<IIssue> {
     const { created_at_start_date, created_at_end_date, ...initialWhere } =
       params;
 
-    const where: WhereOptions<Issue> = { ...initialWhere };
-
-    if (created_at_start_date && created_at_end_date) {
-      where[Op.and] = [
-        { created_at: { [Op.gte]: created_at_start_date } },
-        { created_at: { [Op.lte]: created_at_end_date } },
-      ];
-    } else if (created_at_start_date) {
-      where[Op.and] = [{ created_at: { [Op.gte]: created_at_start_date } }];
-    } else if (created_at_end_date) {
-      where[Op.and] = [{ created_at: { [Op.lte]: created_at_end_date } }];
-    }
+    const where: WhereOptions<Issue> = {
+      ...initialWhere,
+      ...this.getCreatedAtRangeQuery({
+        created_at_start_date,
+        created_at_end_date,
+      }),
+    };
 
     return this.baseRepository.paginate({ ...options, where });
   }
@@ -58,18 +75,12 @@ export class IssueRepository implements Repository<IIssue> {
   async getStatistics(params: IssueRangeQuery = {}) {
     const { created_at_start_date, created_at_end_date } = params;
 
-    const where: WhereOptions<Issue> = {};
-
-    if (created_at_start_date && created_at_end_date) {
-      where[Op.and] = [
-        { created_at: { [Op.gte]: created_at_start_date } },
-        { created_at: { [Op.lte]: created_at_end_date } },
-      ];
-    } else if (created_at_start_date) {
-      where[Op.and] = [{ created_at: { [Op.gte]: created_at_start_date } }];
-    } else if (created_at_end_date) {
-      where[Op.and] = [{ created_at: { [Op.lte]: created_at_end_date } }];
-    }
+    const where: WhereOptions<Issue> = {
+      ...this.getCreatedAtRangeQuery({
+        created_at_start_date,
+        created_at_end_date,
+      }),
+    };
 
     return this.baseRepository.Model.findAll({
       attributes: [
@@ -79,6 +90,7 @@ export class IssueRepository implements Repository<IIssue> {
       ],
       group: [Sequelize.fn('DATE', Sequelize.col('created_at')), 'date'],
       where,
+      order: [['date', 'ASC']],
     });
   }
 }

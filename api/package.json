@@ -19,11 +19,11 @@
         "test:cov": "jest --coverage",
         "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
         "test:e2e": "jest --config ./test/jest-e2e.json",
-        "migrate:base": "dotenv -e .env db-migrate --config ./migrations/migration.config.json -e default",
-        "migrate:schema": "npm run migrate:base",
-        "migrate:schema:create": "npm run migrate:schema create",
-        "migrate:schema:up": "yarn migrate:schema up",
-        "migrate:schema:down": "yarn migrate:schema down"
+        "migrate:base": "dotenv -e .env db-migrate --config ./database.json -e default",
+        "migrate:create": "npm run migrate:base create",
+        "migrate:up": "npm run migrate:base up",
+        "migrate:down": "npm run migrate:base down",
+        "seed": "npm run migrate:base up:seeds"
     },
     "dependencies": {
         "@hapi/joi": "^17.1.1",

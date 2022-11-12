@@ -1,26 +1,31 @@
 version: '3.8'
 services:
   db:
+    container_name: dashboard_api
     image: mysql:8.0
-    cap_add:
-      - SYS_NICE
     restart: always
     environment:
       - MYSQL_DATABASE=dashboard-api
       - MYSQL_ROOT_PASSWORD=rFJjmcuf5dhauRMQj
     ports:
       - '3306:3306'
+    healthcheck:
+      test: mysqladmin ping -h 127.0.0.1 -u root --password=$$MYSQL_ROOT_PASSWORD
+      start_period: 5s
+      interval: 5s
+      timeout: 5s
+      retries: 55
     volumes:
       - db:/var/lib/mysql
-      # - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
   api:
     container_name: api
     build:
-      context: api/
-      target: development
+      context: ./api
+      dockerfile: Dockerfile
     image: dashboard-api
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     ports:
       - 3000:3000
     environment:
@@ -30,6 +35,7 @@ services:
       DB_USER: root
       DB_PASSWORD: rFJjmcuf5dhauRMQj
       DB_NAME: dashboard-api
+      JWT_SECRET_KEY: ABC
     links:
       - db
     volumes:

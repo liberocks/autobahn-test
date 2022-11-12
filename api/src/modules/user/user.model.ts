@@ -14,7 +14,7 @@ export class User extends BaseModel<User> implements IUser {
   @Column({
     type: DataType.STRING,
   })
-  username: string;
+  name: string;
 
   @Column({
     type: DataType.STRING,
