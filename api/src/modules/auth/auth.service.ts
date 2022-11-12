@@ -1,10 +1,70 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { scrypt, randomBytes } from 'crypto';
+import { promisify } from 'util';
 
+import { Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+
+import { IUser } from '../user/user.interface';
 import { UserService } from '../user/user.service';
+
+import { AccessToken, JwtPayload } from './auth.interface';
+import { SignInPayload, SignUpPayload, SignUpRes } from './auth.dto';
+import { pick } from 'lodash';
+
+const scryptAsync = promisify(scrypt);
 
 @Injectable()
 export class AuthService {
-  private readonly logger = new Logger(AuthService.name);
+  constructor(
+    private readonly userService: UserService,
+    private jwtService: JwtService,
+  ) {}
 
-  constructor(private readonly userService: UserService) {}
+  async hashPassword(password: string): Promise<string> {
+    const salt = randomBytes(16).toString('hex');
+    const buf = (await promisify(scrypt)(password, salt, 64)) as Buffer;
+
+    return `${buf.toString('hex')}.${salt}`;
+  }
+
+  async comparePasswords(storedPassword: string, suppliedPassword: string) {
+    const [hashedPassword, salt] = storedPassword.split('.');
+
+    const buf = (await scryptAsync(suppliedPassword, salt, 64)) as Buffer;
+
+    return buf.toString('hex') === hashedPassword;
+  }
+
+  private async validateUser(
+    user: IUser,
+    suppliedPassword: string,
+  ): Promise<boolean> {
+    return this.comparePasswords(user.password, suppliedPassword);
+  }
+
+  async signIn(payload: SignInPayload): Promise<AccessToken | null> {
+    const user = await this.userService.findByEmail(payload.email);
+
+    if (!user || !this.validateUser(user, payload.password)) return null;
+
+    const jwtPayload: JwtPayload = {
+      email: user.email,
+      sub: user.id,
+      username: user.username,
+    };
+
+    return {
+      access_token: this.jwtService.sign(jwtPayload),
+    };
+  }
+
+  async registerUser(payload: SignUpPayload): Promise<SignUpRes> {
+    const user = await this.userService.create({
+      email: payload.email,
+      username: payload.username,
+      password: await this.hashPassword(payload.password),
+    });
+
+    return pick(user, ['email', 'username', 'created_at']);
+  }
 }

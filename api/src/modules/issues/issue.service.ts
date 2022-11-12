@@ -1,5 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
+import { Transaction, FindOptions } from 'sequelize';
 
+import { IIssue } from './issue.interface';
 import IssueRepository from './issue.repository';
 
 @Injectable()

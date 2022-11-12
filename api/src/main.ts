@@ -17,6 +17,16 @@ async function bootstrap() {
     .setTitle('Autobahn Dashboard API')
     .setDescription('API Documentation')
     .setVersion('1.0')
+    .addBearerAuth(
+      {
+        name: 'Authorization',
+        bearerFormat: 'Bearer',
+        scheme: 'Bearer',
+        type: 'http',
+        in: 'Header',
+      },
+      'access-token',
+    )
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);

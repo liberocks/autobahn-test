@@ -12,7 +12,6 @@ export type EnvKeys =
   | 'DB_PORT'
   | 'DB_ROOT_PASSWORD'
   | 'DB_USER'
-  | 'NACL_PUBLIC_KEY'
-  | 'NACL_PRIVATE_KEY';
+  | 'JWT_SECRET_KEY';
 
 export type Env = Record<EnvKeys, string>;

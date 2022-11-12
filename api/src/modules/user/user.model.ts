@@ -14,6 +14,11 @@ export class User extends BaseModel<User> implements IUser {
   @Column({
     type: DataType.STRING,
   })
+  username: string;
+
+  @Column({
+    type: DataType.STRING,
+  })
   password: string;
 }
 

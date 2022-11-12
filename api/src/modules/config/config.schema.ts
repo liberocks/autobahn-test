@@ -15,6 +15,5 @@ export const ConfigSchema = Joi.object({
   DB_PORT: Joi.number().required(),
   DB_USER: Joi.string().required(),
 
-  NACL_PUBLIC_KEY: Joi.string().required(),
-  NACL_PRIVATE_KEY: Joi.string().required(),
+  JWT_SECRET_KEY: Joi.string().required(),
 }).options({ abortEarly: false, stripUnknown: true });

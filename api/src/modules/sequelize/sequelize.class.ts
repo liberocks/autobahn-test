@@ -32,7 +32,9 @@ export class BaseModel<T extends Model<T>> extends Model<T> {
 export class BaseRepository<T extends Model<T>> implements Repository<T> {
   constructor(public readonly Model: NonAbstractTypeOfModel<T>) {}
 
-  protected getFinalData(raw: boolean, data: T | T[]) {
+  protected getFinalData(raw: boolean, data: null | T | T[]) {
+    if (!data) return null;
+
     if (raw) {
       return !Array.isArray(data)
         ? (data.toJSON() as T)
@@ -45,11 +47,9 @@ export class BaseRepository<T extends Model<T>> implements Repository<T> {
   public async findOne(options: FindOptions<T>): Promise<T | null> {
     const { raw = true, ...otherOptions } = options;
 
-    const instance = await this.Model.findOne(otherOptions);
+    const data = await this.Model.findOne(otherOptions);
 
-    if (!instance) return null;
-
-    return this.getFinalData(raw, instance) as T;
+    return this.getFinalData(raw, data) as T | null;
   }
 
   public create(values: Partial<T>, transaction?: Transaction): Promise<T> {
