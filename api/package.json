@@ -37,6 +37,7 @@
         "class-validator": "^0.13.2",
         "dotenv": "^16.0.3",
         "lodash": "^4.17.21",
+        "moment-timezone": "^0.5.38",
         "mysql2": "^2.3.3",
         "reflect-metadata": "^0.1.13",
         "rimraf": "^3.0.2",
