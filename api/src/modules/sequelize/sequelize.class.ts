@@ -7,8 +7,9 @@ import {
   UpdatedAt,
 } from 'sequelize-typescript';
 import { FindOptions, Transaction } from 'sequelize';
-import { NonAbstractTypeOfModel, Repository } from './sequelize.interface';
 import { MakeNullishOptional } from 'sequelize/types/utils';
+
+import { NonAbstractTypeOfModel, Repository } from './sequelize.interface';
 
 export class BaseModel<T extends Model<T>> extends Model<T> {
   @Column({

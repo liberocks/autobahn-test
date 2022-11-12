@@ -1,8 +1,8 @@
 import { Sequelize } from 'sequelize-typescript';
+import { Logger } from '@nestjs/common';
 
 import { ConfigService } from '../config/config.service';
 import { PROVIDER_SEQUELIZE_CLIENT } from '../config/config.constants';
-import { Logger } from '@nestjs/common';
 
 export const sequelizeClientFactory = async (
   configService: ConfigService,
