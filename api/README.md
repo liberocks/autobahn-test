@@ -18,5 +18,5 @@ docker run -p 3000:3000 autobahn-api
 
 ## How to migrate
 ```
-
+npm run migrate:schema:up
 ```
