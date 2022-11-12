@@ -14,6 +14,8 @@ import {
   ApiBody,
   ApiOkResponse,
   ApiOperation,
+  ApiCreatedResponse,
+  ApiTags,
 } from '@nestjs/swagger';
 
 import { UserService } from '../user/user.service';
@@ -23,6 +25,7 @@ import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt.guard';
 
 @Controller({ path: 'auth' })
+@ApiTags('auth')
 export class AuthController {
   private readonly logger = new Logger(AuthController.name);
 
@@ -52,7 +55,7 @@ export class AuthController {
 
   @Post('sign-up')
   @ApiOperation({ summary: 'User signing up' })
-  @ApiOkResponse({ type: SignUpRes })
+  @ApiCreatedResponse({ type: SignUpRes })
   @ApiBody({ type: SignUpPayload })
   async signUp(@Body() body: SignUpPayload) {
     try {
