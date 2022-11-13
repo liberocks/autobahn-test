@@ -14,7 +14,7 @@ const Component: React.FC = () => {
         <div className="grow" />
         <button
           type="button"
-          className="ml-4 flex cursor-pointer rounded-md bg-rose-500 py-2 px-3 text-white hover:bg-rose-600 focus:outline-none focus:ring focus:ring-rose-600 active:bg-rose-800"
+          className="ml-4 flex cursor-pointer rounded-md bg-orange-500 py-2 px-3 font-semibold text-white hover:bg-orange-600 focus:outline-none focus:ring focus:ring-orange-600 active:bg-orange-800"
           onClick={() => navigate(RoutePath.CREATE_ISSUE)}
         >
           <svg
@@ -77,7 +77,7 @@ const Component: React.FC = () => {
                 ></path>
               </svg>
               <svg
-                className="h-5 w-5 text-rose-500"
+                className="h-5 w-5 text-orange-500"
                 fill="currentColor"
                 viewBox="0 0 20 20"
                 xmlns="http://www.w3.org/2000/svg"
@@ -122,7 +122,7 @@ const Component: React.FC = () => {
               <div className="mx-2 mb-2 flex items-end">
                 <div className="w-1/6 px-2">
                   <div
-                    className="relative max-h-[250px] bg-rose-600 md:max-h-[450px]"
+                    className="relative max-h-[250px] bg-orange-600 md:max-h-[450px]"
                     style={{ height: 450 }}
                   >
                     <div className="absolute inset-x-0 top-0 -mt-6 text-center text-sm text-gray-800">
@@ -135,7 +135,7 @@ const Component: React.FC = () => {
               <div className="mx-auto border-t border-gray-400"></div>
               <div className="-mx-2 flex items-end">
                 <div className="w-1/6 px-2">
-                  <div className="relative bg-rose-600">
+                  <div className="relative bg-orange-600">
                     <div className="absolute inset-x-0 top-0 mx-auto -mt-px h-2 w-[1px] bg-gray-400 text-center" />
                     <div className="absolute inset-x-0 top-0 mt-3 text-center text-sm text-gray-700">
                       Issue A

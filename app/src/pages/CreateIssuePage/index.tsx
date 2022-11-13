@@ -9,7 +9,25 @@ const Component: React.FC = () => {
 
   return (
     <Layout navigate={navigate}>
-      <h2 className="pl-2 text-2xl font-semibold">Create new issue</h2>
+      <h2 className="flex items-center pl-2 text-2xl font-semibold">
+        <button className="mr-2" onClick={() => navigate(-1)}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <line x1="19" y1="12" x2="5" y2="12" />
+            <polyline points="12 19 5 12 12 5" />
+          </svg>
+        </button>
+        Create new issue
+      </h2>
       <h4 className="pl-2 text-base font-normal">
         An issue contains name, description, date, and score.
       </h4>
@@ -51,13 +69,22 @@ const Component: React.FC = () => {
             className="mt-1 mb-5 w-full rounded-lg border px-3 py-2 text-base"
           />
 
-          <button
-            type="button"
-            className="mt-2 flex cursor-pointer rounded-md bg-rose-500 py-2 px-16 text-white hover:bg-rose-600 focus:outline-none focus:ring focus:ring-rose-600 active:bg-rose-800"
-            onClick={() => navigate(RoutePath.CREATE_ISSUE)}
-          >
-            Create issue
-          </button>
+          <div className="flex justify-between">
+            <button
+              type="button"
+              className="mt-2 flex cursor-pointer rounded-md py-2 px-16 font-semibold text-orange-500 hover:bg-gray-50"
+              onClick={() => navigate(-1)}
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              className="mt-2 flex cursor-pointer rounded-md bg-orange-500 py-2 px-16 font-semibold text-white hover:bg-orange-600 focus:outline-none focus:ring focus:ring-orange-600 active:bg-orange-800"
+              onClick={() => navigate(RoutePath.CREATE_ISSUE)}
+            >
+              Create issue
+            </button>
+          </div>
         </div>
       </div>
     </Layout>

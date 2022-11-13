@@ -26,14 +26,18 @@ export const Layout: React.FC<LayoutProps> = (props) => {
 
         <button
           type="button"
-          className="cursor-pointer"
+          className="cursor-pointer font-semibold"
           onClick={() => navigate(RoutePath.HOME)}
         >
           Dashboard
         </button>
 
         <div className="grow" />
-        <button type="button" className="cursor-pointer" onClick={handleLogout}>
+        <button
+          type="button"
+          className="cursor-pointer font-semibold"
+          onClick={handleLogout}
+        >
           Logout
         </button>
       </nav>

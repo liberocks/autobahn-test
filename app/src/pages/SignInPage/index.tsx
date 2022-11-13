@@ -38,7 +38,7 @@ const Component: React.FC = () => {
             />
             <button
               type="button"
-              className="inline-block w-full rounded-lg bg-rose-500 py-2.5 text-center text-base font-semibold text-white shadow-sm transition duration-200 hover:bg-rose-600 hover:shadow-md focus:bg-rose-700 focus:shadow-sm focus:ring-2 focus:ring-rose-500/50"
+              className="inline-block w-full rounded-lg bg-orange-500 py-2.5 text-center text-base font-semibold text-white shadow-sm transition duration-200 hover:bg-orange-600 hover:shadow-md focus:bg-orange-700 focus:shadow-sm focus:ring-2 focus:ring-orange-500/50"
               onClick={handleSignIn}
             >
               <span className="mr-2 inline-block">Login</span>
@@ -47,7 +47,7 @@ const Component: React.FC = () => {
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
-                className="inline-block h-4 w-4"
+                className="inline-block h-6 w-6"
               >
                 <path
                   strokeLinecap="round"

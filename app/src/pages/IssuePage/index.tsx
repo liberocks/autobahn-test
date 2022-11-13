@@ -12,11 +12,29 @@ const Component: React.FC = () => {
   return (
     <Layout navigate={navigate}>
       <div className="flex items-center pr-0">
-        <h2 className="pl-2 text-2xl font-semibold">All issues</h2>
+        <h2 className="flex items-center pl-2 text-2xl font-semibold">
+          <button className="mr-2" onClick={() => navigate(-1)}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <line x1="19" y1="12" x2="5" y2="12" />
+              <polyline points="12 19 5 12 12 5" />
+            </svg>
+          </button>
+          All issues
+        </h2>
         <div className="grow" />
         <button
           type="button"
-          className="ml-4 flex cursor-pointer rounded-md bg-rose-500 py-2 px-3 text-white hover:bg-rose-600 focus:outline-none focus:ring focus:ring-rose-600 active:bg-rose-800"
+          className="ml-4 flex cursor-pointer rounded-md bg-orange-500 py-2 px-3 font-semibold text-white hover:bg-orange-600 focus:outline-none focus:ring focus:ring-orange-600 active:bg-orange-800"
           onClick={() => navigate(RoutePath.CREATE_ISSUE)}
         >
           <svg
@@ -43,7 +61,7 @@ const Component: React.FC = () => {
           <table className="w-full table-auto border-collapse">
             <thead>
               <tr
-                className="rounded-lg text-left text-sm font-medium text-gray-700"
+                className="rounded-lg text-left text-base font-medium text-gray-700"
                 style={{ fontSize: '0.9674rem' }}
               >
                 <th className="max-w-[100px] px-4 py-2">Name</th>
@@ -54,13 +72,14 @@ const Component: React.FC = () => {
                 <th className="max-w-[100px] px-4 py-2">Date</th>
               </tr>
             </thead>
-            <tbody className="text-sm font-normal text-gray-700">
-              <tr className="border-b border-gray-200 py-10 hover:bg-gray-100">
+            <tbody className="text-base font-normal text-gray-700">
+              <tr className="group border-b border-gray-200 py-10 hover:bg-gray-100">
                 <td className="p-4">Intro to CSS</td>
                 <td className="hidden p-4 md:flex">Adam</td>
                 <td className="p-4">858</td>
                 <td className="p-4">858</td>
               </tr>
+
               <tr className="border-b border-gray-200 py-4 hover:bg-gray-100">
                 <td className="p-4">A Long and</td>
                 <td className="hidden p-4 md:flex">Adam</td>
@@ -100,16 +119,16 @@ const Component: React.FC = () => {
             </svg>
           </button>
 
-          <button className="mx-2 cursor-pointer text-base leading-relaxed text-red-600 hover:text-red-600">
+          <button className="mx-2 cursor-pointer text-base font-semibold leading-relaxed text-red-600 hover:text-red-600">
             1
           </button>
-          <button className="mx-2 cursor-pointer text-base leading-relaxed hover:text-red-600">
+          <button className="mx-2 cursor-pointer text-base font-semibold leading-relaxed hover:text-red-600">
             2
           </button>
-          <button className="mx-2 cursor-pointer text-base leading-relaxed hover:text-red-600">
+          <button className="mx-2 cursor-pointer text-base font-semibold leading-relaxed hover:text-red-600">
             3
           </button>
-          <button className="mx-2 cursor-pointer text-base leading-relaxed hover:text-red-600">
+          <button className="mx-2 cursor-pointer text-base font-semibold leading-relaxed hover:text-red-600">
             4
           </button>
 
