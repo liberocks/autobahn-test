@@ -39,10 +39,10 @@ export const Layout: React.FC<LayoutProps> = (props) => {
       </nav>
       <aside
         id="sidebar"
-        className="fixed top-0 left-0 z-20 hidden hidden h-full w-64 shrink-0 lg:visible lg:flex"
+        className="fixed top-0 left-0 z-20 hidden h-full w-64 shrink-0 lg:visible lg:flex"
         aria-label="Sidebar"
       >
-        <div className="flex flex-1 flex-col space-y-1 bg-white py-4">
+        <div className="flex flex-1 flex-col space-y-1 divide-y bg-white py-4">
           <img
             src="/logo.svg"
             alt="Autobahn security logo"
