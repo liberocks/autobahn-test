@@ -34,7 +34,7 @@ const Component: React.FC = () => {
         <div className="grow" />
         <button
           type="button"
-          className="ml-4 flex cursor-pointer rounded-md bg-orange-500 py-2 px-3 font-semibold text-white hover:bg-orange-600 focus:outline-none focus:ring focus:ring-orange-600 active:bg-orange-800"
+          className="ml-4 flex min-w-[105px] cursor-pointer rounded-md bg-orange-500 py-2 px-3 font-semibold text-white hover:bg-orange-600 focus:outline-none focus:ring focus:ring-orange-600 active:bg-orange-800"
           onClick={() => navigate(RoutePath.CREATE_ISSUE)}
         >
           <svg
@@ -47,7 +47,7 @@ const Component: React.FC = () => {
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className="mr-2 w-5"
+            className="mr-2 hidden w-5 sm:flex"
           >
             <line x1="12" y1="5" x2="12" y2="19" />
             <line x1="5" y1="12" x2="19" y2="12" />

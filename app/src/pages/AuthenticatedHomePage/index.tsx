@@ -14,7 +14,7 @@ const Component: React.FC = () => {
         <div className="grow" />
         <button
           type="button"
-          className="ml-4 flex cursor-pointer rounded-md bg-orange-500 py-2 px-3 font-semibold text-white hover:bg-orange-600 focus:outline-none focus:ring focus:ring-orange-600 active:bg-orange-800"
+          className="ml-4 flex min-w-[105px] cursor-pointer rounded-md bg-orange-500 py-2 px-3 font-semibold text-white hover:bg-orange-600 focus:outline-none focus:ring focus:ring-orange-600 active:bg-orange-800"
           onClick={() => navigate(RoutePath.CREATE_ISSUE)}
         >
           <svg
@@ -27,7 +27,7 @@ const Component: React.FC = () => {
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className="mr-2 w-5"
+            className="mr-2 hidden w-5 sm:flex"
           >
             <line x1="12" y1="5" x2="12" y2="19" />
             <line x1="5" y1="12" x2="19" y2="12" />
@@ -38,12 +38,12 @@ const Component: React.FC = () => {
 
       <div className="mt-4 grid w-full grid-cols-1 gap-4 md:grid-cols-2">
         <div className="rounded-xl bg-white p-4 sm:p-6 xl:p-8 ">
-          <h3 className="mb-10 text-xl font-bold leading-none text-gray-900">
+          <h3 className="mb-10 text-2xl font-bold leading-none text-gray-900">
             System score
           </h3>
           <div className="flex items-center">
             <div className="shrink-0">
-              <span className="text-2xl font-bold leading-none text-gray-900 sm:text-3xl">
+              <span className="text-3xl font-bold leading-none text-gray-900 sm:text-3xl">
                 2340
               </span>
               <h3 className="text-base font-normal text-gray-500">today</h3>
@@ -51,12 +51,12 @@ const Component: React.FC = () => {
           </div>
         </div>
         <div className="rounded-xl bg-white p-4 sm:p-6 xl:p-8 ">
-          <h3 className="mb-10 text-xl font-bold leading-none text-gray-900">
+          <h3 className="mb-10 text-2xl font-bold leading-none text-gray-900">
             System score changes
           </h3>
           <div className="flex items-center">
             <div className="shrink-0">
-              <span className="text-2xl font-bold leading-none text-gray-900 sm:text-3xl">
+              <span className="text-3xl font-bold leading-none text-gray-900 sm:text-3xl">
                 32.9%
               </span>
               <h3 className="text-base font-normal text-gray-500">
@@ -97,10 +97,10 @@ const Component: React.FC = () => {
           <div className="rounded-xl bg-white p-6 ">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-xl font-bold leading-tight text-gray-800">
+                <h2 className="text-2xl font-bold leading-tight text-gray-800">
                   Issues
                 </h2>
-                <p className="mb-2 text-sm text-gray-600">
+                <p className="mb-2 text-base text-gray-600">
                   Latest issues score
                 </p>
               </div>

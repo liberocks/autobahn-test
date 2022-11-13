@@ -69,20 +69,20 @@ const Component: React.FC = () => {
             className="mt-1 mb-5 w-full rounded-lg border px-3 py-2 text-base"
           />
 
-          <div className="flex justify-between">
+          <div className="flex items-center justify-between">
             <button
               type="button"
-              className="mt-2 flex cursor-pointer rounded-md py-2 px-16 font-semibold text-orange-500 hover:bg-gray-50"
+              className="mt-2 flex min-w-[105px] cursor-pointer rounded-md py-2 px-16 font-semibold text-orange-500 hover:bg-gray-50 sm:pl-[5.5rem] sm:pr-24"
               onClick={() => navigate(-1)}
             >
               Cancel
             </button>
             <button
               type="button"
-              className="mt-2 flex cursor-pointer rounded-md bg-orange-500 py-2 px-16 font-semibold text-white hover:bg-orange-600 focus:outline-none focus:ring focus:ring-orange-600 active:bg-orange-800"
+              className="mt-2 flex min-w-[105px] cursor-pointer rounded-md bg-orange-500 py-2 px-16 font-semibold text-white hover:bg-orange-600 focus:outline-none focus:ring focus:ring-orange-600 active:bg-orange-800 sm:pl-[5.5rem] sm:pr-24"
               onClick={() => navigate(RoutePath.CREATE_ISSUE)}
             >
-              Create issue
+              Create
             </button>
           </div>
         </div>
