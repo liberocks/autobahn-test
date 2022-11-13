@@ -1,9 +1,18 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const Component: React.FC = () => (
-  <h1 className="text-3xl font-bold underline text-red-600">
-    This is create issue page
-  </h1>
-);
+import { Layout } from '../../components/Layout';
+
+const Component: React.FC = () => {
+  const navigate = useNavigate();
+
+  return (
+    <Layout navigate={navigate}>
+      <h1 className="text-3xl font-bold text-rose-600 underline">
+        This is create issue page
+      </h1>
+    </Layout>
+  );
+};
 
 export const CreateIssuePage: React.FC = React.memo(Component);

@@ -1,14 +1,43 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { Layout } from '../../components/Layout';
+import { RoutePath } from '../../route';
 
 const Component: React.FC = () => {
+  const navigate = useNavigate();
+
   return (
-    <Layout>
-      <h2 className="pl-2 text-2xl">Cyber Fitness Dashboard</h2>
+    <Layout navigate={navigate}>
+      <div className="flex items-center pr-0">
+        <h2 className="pl-2 text-2xl font-semibold">Cyber Fitness Dashboard</h2>
+        <div className="grow" />
+        <button
+          type="button"
+          className="ml-4 flex cursor-pointer rounded-md bg-rose-500 py-2 px-3 text-white hover:bg-rose-600 focus:outline-none focus:ring focus:ring-rose-600 active:bg-rose-800"
+          onClick={() => navigate(RoutePath.CREATE_ISSUE)}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="mr-2 w-5"
+          >
+            <line x1="12" y1="5" x2="12" y2="19" />
+            <line x1="5" y1="12" x2="19" y2="12" />
+          </svg>
+          New Issue
+        </button>
+      </div>
 
       <div className="mt-4 grid w-full grid-cols-1 gap-4 md:grid-cols-2">
-        <div className="rounded-lg bg-white p-4 sm:p-6 xl:p-8 ">
+        <div className="rounded-xl bg-white p-4 sm:p-6 xl:p-8 ">
           <h3 className="mb-10 text-xl font-bold leading-none text-gray-900">
             System score
           </h3>
@@ -21,7 +50,7 @@ const Component: React.FC = () => {
             </div>
           </div>
         </div>
-        <div className="rounded-lg bg-white p-4 sm:p-6 xl:p-8 ">
+        <div className="rounded-xl bg-white p-4 sm:p-6 xl:p-8 ">
           <h3 className="mb-10 text-xl font-bold leading-none text-gray-900">
             System score changes
           </h3>
@@ -48,7 +77,7 @@ const Component: React.FC = () => {
                 ></path>
               </svg>
               <svg
-                className="h-5 w-5 text-red-500"
+                className="h-5 w-5 text-rose-500"
                 fill="currentColor"
                 viewBox="0 0 20 20"
                 xmlns="http://www.w3.org/2000/svg"
@@ -65,7 +94,7 @@ const Component: React.FC = () => {
       </div>
       <div className="mb-4 grid grid-cols-1 xl:gap-4">
         <div className="mx-auto w-full pt-4">
-          <div className="rounded-lg bg-white p-6 ">
+          <div className="rounded-xl bg-white p-6 ">
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="text-xl font-bold leading-tight text-gray-800">
@@ -78,9 +107,13 @@ const Component: React.FC = () => {
 
               <div className="mb-4">
                 <div className="flex items-center">
-                  <div className="cursor-pointer text-base text-gray-700 underline underline-offset-4">
+                  <button
+                    type="button"
+                    className="cursor-pointer text-base text-gray-700 underline underline-offset-4"
+                    onClick={() => navigate(RoutePath.ISSUE)}
+                  >
                     See all
-                  </div>
+                  </button>
                 </div>
               </div>
             </div>
@@ -89,7 +122,7 @@ const Component: React.FC = () => {
               <div className="mx-2 mb-2 flex items-end">
                 <div className="w-1/6 px-2">
                   <div
-                    className="relative max-h-[250px] bg-blue-600 md:max-h-[450px]"
+                    className="relative max-h-[250px] bg-rose-600 md:max-h-[450px]"
                     style={{ height: 450 }}
                   >
                     <div className="absolute inset-x-0 top-0 -mt-6 text-center text-sm text-gray-800">
@@ -102,7 +135,7 @@ const Component: React.FC = () => {
               <div className="mx-auto border-t border-gray-400"></div>
               <div className="-mx-2 flex items-end">
                 <div className="w-1/6 px-2">
-                  <div className="relative bg-red-600">
+                  <div className="relative bg-rose-600">
                     <div className="absolute inset-x-0 top-0 mx-auto -mt-px h-2 w-[1px] bg-gray-400 text-center" />
                     <div className="absolute inset-x-0 top-0 mt-3 text-center text-sm text-gray-700">
                       Issue A

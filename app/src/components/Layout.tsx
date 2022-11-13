@@ -1,10 +1,19 @@
 import React from 'react';
+import { NavigateFunction } from 'react-router-dom';
+import { RoutePath } from '../route';
 
 interface LayoutProps {
   children: React.ReactNode;
+  navigate: NavigateFunction;
 }
 export const Layout: React.FC<LayoutProps> = (props) => {
-  const { children } = props;
+  const { children, navigate } = props;
+
+  const handleLogout = () => {
+    // TODO: logout workflow
+
+    navigate(RoutePath.SIGN_IN);
+  };
 
   return (
     <div className="flex overflow-hidden">
@@ -14,10 +23,19 @@ export const Layout: React.FC<LayoutProps> = (props) => {
           alt="Autobahn security logo"
           className="flex w-32 items-center px-6"
         />
-        <div>Dashboard</div>
-        <div className="ml-4">New Issue</div>
+
+        <button
+          type="button"
+          className="cursor-pointer"
+          onClick={() => navigate(RoutePath.HOME)}
+        >
+          Dashboard
+        </button>
+
         <div className="grow" />
-        <div>Logout</div>
+        <button type="button" className="cursor-pointer" onClick={handleLogout}>
+          Logout
+        </button>
       </nav>
       <aside
         id="sidebar"
@@ -31,19 +49,54 @@ export const Layout: React.FC<LayoutProps> = (props) => {
             className="flex w-auto items-center px-6"
           />
 
-          <div className="flex cursor-pointer items-center py-2 px-6 text-base font-normal text-gray-900 hover:bg-gray-100">
+          <button
+            type="button"
+            className="flex cursor-pointer items-center py-2 px-6 text-base font-normal text-gray-900 hover:bg-gray-100"
+            onClick={() => navigate(RoutePath.HOME)}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="mr-2"
+            >
+              <path d="M21.21 15.89A10 10 0 1 1 8 2.83" />
+              <path d="M22 12A10 10 0 0 0 12 2v10z" />
+            </svg>
             Dashboard
-          </div>
-
-          <div className="flex cursor-pointer items-center py-2 px-6 text-base font-normal text-gray-900 hover:bg-gray-100">
-            New Issue
-          </div>
+          </button>
 
           <div className="grow" />
 
-          <div className="flex cursor-pointer items-center py-2 px-6 text-base font-normal text-gray-900 transition duration-75 hover:bg-gray-100">
+          <button
+            type="button"
+            className="flex cursor-pointer items-center py-2 px-6 text-base font-normal text-gray-900 transition duration-75 hover:bg-gray-100"
+            onClick={handleLogout}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="mr-2"
+            >
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
             Logout
-          </div>
+          </button>
         </div>
       </aside>
 
