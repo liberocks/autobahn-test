@@ -6,6 +6,7 @@ import { HomePage } from './pages/HomePage';
 import { SignInPage } from './pages/SignInPage';
 import { CreateIssuePage } from './pages/CreateIssuePage';
 import { IssuePage } from './pages/IssuePage';
+import { AuthenticatedHomePage } from './pages/AuthenticatedHomePage';
 
 export enum RoutePath {
   HOME = '/',
@@ -17,7 +18,7 @@ export enum RoutePath {
 export const router = createBrowserRouter([
   {
     path: RoutePath.HOME,
-    element: <HomePage />,
+    element: <AuthenticatedHomePage />,
   },
   {
     path: RoutePath.SIGN_IN,
