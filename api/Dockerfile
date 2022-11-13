@@ -26,5 +26,5 @@ COPY --chown=node:node --from=build /usr/src/app/node_modules ./node_modules
 COPY --chown=node:node --from=build /usr/src/app/dist ./dist
 
 # Start the server using the production build
-EXPOSE 3000
+EXPOSE 8000
 CMD [ "node", "dist/main.js" ]

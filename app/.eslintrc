@@ -2,16 +2,7 @@
   "parser": "@typescript-eslint/parser",
   "plugins": [
     "@typescript-eslint",
-    "react-hooks",
-  ],
-  "extends": [
-    "airbnb",
-    "plugin:cypress/recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:@typescript-eslint/eslint-recommended",
-    "prettier",
-    "prettier/react",
-    "prettier/@typescript-eslint"
+    "react-hooks"
   ],
   "env": {
     "node": true,

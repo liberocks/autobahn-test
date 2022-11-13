@@ -11,7 +11,7 @@ async function bootstrap() {
 
   const configService = app.get<ConfigService>(ConfigService);
   const logger = new Logger('NestApplication');
-  const PORT = configService.get('PORT') || 3000;
+  const PORT = configService.get('PORT') || 8000;
 
   const config = new DocumentBuilder()
     .setTitle('Autobahn Dashboard API')
