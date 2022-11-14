@@ -50,11 +50,11 @@ export class SignUpPayload {
   @ApiProperty({ required: true })
   @IsNotEmpty()
   @IsString()
-  @MinLength(8)
-  @MaxLength(20)
-  @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
-    message: 'password too weak',
-  })
+  // @MinLength(8)
+  // @MaxLength(20)
+  // @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
+  //   message: 'password too weak',
+  // })
   readonly password: string;
 }
 

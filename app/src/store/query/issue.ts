@@ -27,14 +27,14 @@ interface GetIssuesParams extends CreatedAtRange {
 type GetIssuesStatisticsParams = CreatedAtRange;
 
 export default {
-  createIssue: (payload: CreateIssuePayload) => {
+  createIssue: async (payload: CreateIssuePayload) => {
     const accessToken = useRecoilValue(accessTokenAtom);
 
     if (!accessToken) {
       throw new UnauthorizedError('Access token is required.');
     }
 
-    return fetch(`${process.env.REACT_APP_API_URL}/${ISSUE_PATH}`, {
+    const res = await fetch(`${process.env.REACT_APP_API_URL}/${ISSUE_PATH}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -42,8 +42,10 @@ export default {
       },
       body: JSON.stringify(payload),
     });
+
+    return res.json();
   },
-  getIssues: (params: GetIssuesParams) => {
+  getIssues: async (params: GetIssuesParams) => {
     const accessToken = useRecoilValue(accessTokenAtom);
 
     if (!accessToken) {
@@ -54,14 +56,16 @@ export default {
       !isEmpty(params) ? paramsToQueryString(params as Params) : ''
     }`;
 
-    return fetch(uri, {
+    const res = await fetch(uri, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
     });
+
+    return res.json();
   },
-  getIssuesStatistics: (params: GetIssuesStatisticsParams) => {
+  getIssuesStatistics: async (params: GetIssuesStatisticsParams) => {
     const accessToken = useRecoilValue(accessTokenAtom);
 
     if (!accessToken) {
@@ -72,11 +76,13 @@ export default {
       !isEmpty(params) ? paramsToQueryString(params as Params) : ''
     }`;
 
-    return fetch(uri, {
+    const res = await fetch(uri, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
     });
+
+    return res.json();
   },
 };

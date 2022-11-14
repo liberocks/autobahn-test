@@ -6,22 +6,32 @@ type SignInPayload = Pick<User, 'email' | 'password'>;
 type SignUpPayload = Pick<User, 'email' | 'password' | 'name'>;
 
 export default {
-  signIn: (payload: SignInPayload) => {
-    return fetch(`${process.env.REACT_APP_API_URL}/${AUTH_PATH}/sign-in`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
+  signIn: async (payload: SignInPayload) => {
+    const res = await fetch(
+      `${process.env.REACT_APP_API_URL}/${AUTH_PATH}/sign-in`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
       },
-      body: JSON.stringify(payload),
-    });
+    );
+
+    return res.json();
   },
-  signUp: (payload: SignUpPayload) => {
-    return fetch(`${process.env.REACT_APP_API_URL}/${AUTH_PATH}/sign-up`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
+  signUp: async (payload: SignUpPayload) => {
+    const res = await fetch(
+      `${process.env.REACT_APP_API_URL}/${AUTH_PATH}/sign-up`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
       },
-      body: JSON.stringify(payload),
-    });
+    );
+
+    return res.json();
   },
 };

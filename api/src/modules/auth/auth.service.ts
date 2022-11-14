@@ -20,7 +20,7 @@ export class AuthService {
   ) {}
 
   async hashPassword(password: string): Promise<string> {
-    const salt = randomBytes(16).toString('hex');
+    const salt = randomBytes(8).toString('hex');
     const buf = (await promisify(scrypt)(password, salt, 64)) as Buffer;
 
     return `${buf.toString('hex')}.${salt}`;
@@ -30,8 +30,9 @@ export class AuthService {
     const [hashedPassword, salt] = storedPassword.split('.');
 
     const buf = (await scryptAsync(suppliedPassword, salt, 64)) as Buffer;
+    const hashedSuppliedPassword = buf.toString('hex');
 
-    return buf.toString('hex') === hashedPassword;
+    return hashedSuppliedPassword === hashedPassword;
   }
 
   private async validateUser(
@@ -44,7 +45,9 @@ export class AuthService {
   async signIn(payload: SignInPayload): Promise<AccessToken | null> {
     const user = await this.userService.findByEmail(payload.email);
 
-    if (!user || !this.validateUser(user, payload.password)) return null;
+    if (!user || !(await this.validateUser(user, payload.password))) {
+      return null;
+    }
 
     const jwtPayload: JwtPayload = {
       email: user.email,
