@@ -1,11 +1,55 @@
-import React from 'react';
+import { useQuery } from '@tanstack/react-query';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import moment from 'moment';
 
+import issue from '../../store/query/issue';
 import { Layout } from '../../components/Layout';
 import { RoutePath } from '../../route';
+import { useRecoilValue } from 'recoil';
+import { accessTokenAtom } from '../../store/atom/accessToken.atom';
+import { Issue } from '../../store/model/issue';
+import { colorScale } from '../../common/colorScale';
+import { ShowIf } from '../../components/ShowIf';
 
 const Component: React.FC = () => {
   const navigate = useNavigate();
+  const accessToken = useRecoilValue(accessTokenAtom);
+
+  const { data } = useQuery({
+    queryKey: ['getIssues'],
+    queryFn: async () => {
+      const res = await issue.getIssues(
+        {
+          page_size: 100,
+          created_at_start_date: moment()
+            .subtract(1, 'day')
+            .startOf('day')
+            .format('YYYY-MM-DD'),
+          created_at_end_date: moment().endOf('day').format('YYYY-MM-DD'),
+        },
+        accessToken,
+      );
+      return res;
+    },
+  });
+
+  const issues = data?.data || [];
+  const todayIssues = issues.filter((issue: Issue) =>
+    moment(issue.created_at).isSame(moment(), 'day'),
+  );
+  const todayScore = todayIssues.reduce(
+    (acc: number, issue: Issue) => acc + issue.score,
+    0,
+  );
+
+  const yesterdayIssues = issues.filter((issue: Issue) =>
+    moment(issue.created_at).isSame(moment().subtract(1, 'day'), 'day'),
+  );
+  const yesterdayScore = yesterdayIssues.reduce(
+    (acc: number, issue: Issue) => acc + issue.score,
+    0,
+  );
 
   return (
     <Layout navigate={navigate}>
@@ -44,7 +88,7 @@ const Component: React.FC = () => {
           <div className="flex items-center">
             <div className="shrink-0">
               <span className="text-3xl font-bold leading-none text-gray-900 sm:text-3xl">
-                2340
+                {todayScore}
               </span>
               <h3 className="text-base font-normal text-gray-500">today</h3>
             </div>
@@ -57,37 +101,59 @@ const Component: React.FC = () => {
           <div className="flex items-center">
             <div className="shrink-0">
               <span className="text-3xl font-bold leading-none text-gray-900 sm:text-3xl">
-                32.9%
+                {((todayScore - yesterdayScore) / (yesterdayScore || 1)) *
+                  100.0}
+                %
               </span>
               <h3 className="text-base font-normal text-gray-500">
-                yesterday 2343
+                yesterday score {yesterdayScore}
               </h3>
             </div>
             <div className="ml-5 flex w-0 flex-1 items-center justify-end text-base font-bold ">
-              <svg
-                className="h-5 w-5 text-green-500"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z"
-                  clipRule="evenodd"
-                ></path>
-              </svg>
-              <svg
-                className="h-5 w-5 text-orange-500"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M14.707 12.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l2.293-2.293a1 1 0 011.414 0z"
-                  clipRule="evenodd"
-                ></path>
-              </svg>
+              <ShowIf condition={todayScore > yesterdayScore}>
+                <svg
+                  className="h-5 w-5 text-green-500"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z"
+                    clipRule="evenodd"
+                  ></path>
+                </svg>
+              </ShowIf>
+              <ShowIf condition={todayScore < yesterdayScore}>
+                <svg
+                  className="h-5 w-5 text-orange-500"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M14.707 12.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l2.293-2.293a1 1 0 011.414 0z"
+                    clipRule="evenodd"
+                  ></path>
+                </svg>
+              </ShowIf>
+              <ShowIf condition={todayScore === yesterdayScore}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="h-5 w-5 text-gray-500"
+                >
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                </svg>
+              </ShowIf>
             </div>
           </div>
         </div>
@@ -118,32 +184,52 @@ const Component: React.FC = () => {
               </div>
             </div>
 
-            <div className="relative my-8 min-h-[250px] md:min-h-[450px]">
-              <div className="mx-2 mb-2 flex items-end">
-                <div className="w-1/6 px-2">
-                  <div
-                    className="relative max-h-[250px] bg-orange-600 md:max-h-[450px]"
-                    style={{ height: 450 }}
-                  >
-                    <div className="absolute inset-x-0 top-0 -mt-6 text-center text-sm text-gray-800">
-                      1234
-                    </div>
-                  </div>
+            <ShowIf condition={issues.length === 0}>
+              <div className="text-gray-500">No issues</div>
+            </ShowIf>
+            <ShowIf condition={issues.length > 0}>
+              <div className="relative my-8 min-h-[450px]">
+                <div className="mx-2 mb-2 flex items-end">
+                  {issues.map((issue: Issue) => {
+                    const color = colorScale(issue.score, 0, 100);
+                    return (
+                      <div
+                        className="w-1/6 px-2"
+                        key={`issue-score-${issue.id}`}
+                      >
+                        <div
+                          className="relative max-h-[450px]"
+                          style={{
+                            height: (issue.score / 100) * 450,
+                            background: `linear-gradient(0deg, ${color}55 0%, ${color} 100%)`,
+                          }}
+                        >
+                          <div className="absolute inset-x-0 top-0 -mt-6 text-center text-sm text-gray-800">
+                            {issue.score}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
-              </div>
 
-              <div className="mx-auto border-t border-gray-400"></div>
-              <div className="-mx-2 flex items-end">
-                <div className="w-1/6 px-2">
-                  <div className="relative bg-orange-600">
-                    <div className="absolute inset-x-0 top-0 mx-auto -mt-px h-2 w-[1px] bg-gray-400 text-center" />
-                    <div className="absolute inset-x-0 top-0 mt-3 text-center text-sm text-gray-700">
-                      Issue A
-                    </div>
-                  </div>
+                <div className="mx-auto border-t border-gray-400" />
+                <div className="-mx-2 flex items-end">
+                  {issues.map((issue: Issue) => {
+                    return (
+                      <div className="w-1/6 px-2" key={`issue-bar-${issue.id}`}>
+                        <div className="relative bg-orange-600">
+                          <div className="absolute inset-x-0 top-0 mx-auto -mt-px h-2 w-[1px] bg-gray-400 text-center" />
+                          <div className="absolute inset-x-0 top-0 mt-3 text-center text-sm text-gray-700">
+                            {issue.name}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
-            </div>
+            </ShowIf>
           </div>
         </div>
       </div>

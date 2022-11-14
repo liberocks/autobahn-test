@@ -1,10 +1,8 @@
 import { isEmpty } from 'lodash';
-import { useRecoilValue } from 'recoil';
 
 import { UnauthorizedError } from '../../common/errors';
 import { Params, paramsToQueryString } from '../../common/paramsToQueryString';
 
-import { accessTokenAtom } from '../atom/accessToken.atom';
 import { Issue } from '../model/issue';
 
 const ISSUE_PATH = 'issue';
@@ -27,9 +25,10 @@ interface GetIssuesParams extends CreatedAtRange {
 type GetIssuesStatisticsParams = CreatedAtRange;
 
 export default {
-  createIssue: async (payload: CreateIssuePayload) => {
-    const accessToken = useRecoilValue(accessTokenAtom);
-
+  createIssue: async (
+    payload: CreateIssuePayload,
+    accessToken: string | null,
+  ) => {
     if (!accessToken) {
       throw new UnauthorizedError('Access token is required.');
     }
@@ -45,12 +44,13 @@ export default {
 
     return res.json();
   },
-  getIssues: async (params: GetIssuesParams) => {
-    const accessToken = useRecoilValue(accessTokenAtom);
-
+  getIssues: async (params: GetIssuesParams, accessToken: string | null) => {
     if (!accessToken) {
       throw new UnauthorizedError('Access token is required.');
     }
+
+    console.log('DEBUG params', params);
+    console.log('DEBUG qs', paramsToQueryString(params as Params));
 
     const uri = `${process.env.REACT_APP_API_URL}/${ISSUE_PATH}?${
       !isEmpty(params) ? paramsToQueryString(params as Params) : ''
@@ -65,9 +65,10 @@ export default {
 
     return res.json();
   },
-  getIssuesStatistics: async (params: GetIssuesStatisticsParams) => {
-    const accessToken = useRecoilValue(accessTokenAtom);
-
+  getIssuesStatistics: async (
+    params: GetIssuesStatisticsParams,
+    accessToken: string | null,
+  ) => {
     if (!accessToken) {
       throw new UnauthorizedError('Access token is required.');
     }
