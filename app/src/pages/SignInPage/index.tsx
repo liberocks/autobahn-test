@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 
 import { ShowIf } from '../../components/ShowIf';
@@ -17,6 +17,7 @@ const Component: React.FC = () => {
   const setAccessToken = useSetRecoilState(accessTokenAtom);
 
   const navigate = useNavigate();
+  const { state } = useLocation();
 
   const handleSignIn = async () => {
     const promise = async () => {
@@ -46,6 +47,14 @@ const Component: React.FC = () => {
     await promise();
     setIsLoading(false);
   };
+
+  useEffect(() => {
+    const { error } = state;
+
+    if (error) {
+      setErrorMessage(error);
+    }
+  }, []);
 
   return (
     <div className="flex min-h-screen flex-col justify-center bg-gray-100 sm:py-12">
