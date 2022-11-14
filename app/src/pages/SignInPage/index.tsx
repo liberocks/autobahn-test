@@ -31,6 +31,7 @@ const Component: React.FC = () => {
 
       try {
         const result = await auth.signIn({ email, password });
+
         if (!result.access_token) {
           throw new UnauthorizedError('Invalid email or password');
         }

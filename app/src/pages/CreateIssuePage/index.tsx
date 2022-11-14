@@ -1,11 +1,61 @@
-import React from 'react';
+import moment from 'moment';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
 
 import { Layout } from '../../components/Layout';
+import { ShowIf } from '../../components/ShowIf';
+import { Spinner } from '../../components/Spinner';
 import { RoutePath } from '../../route';
+import { accessTokenAtom } from '../../store/atom/accessToken.atom';
+import issue from '../../store/query/issue';
 
 const Component: React.FC = () => {
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+  const [score, setScore] = useState(0);
+  const [created_at, setCreatedAt] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const accessToken = useRecoilValue(accessTokenAtom);
+
   const navigate = useNavigate();
+
+  const handleSubmit = async () => {
+    const promise = async () => {
+      if (!moment(created_at).isValid()) {
+        return setErrorMessage('Invalid date');
+      }
+
+      try {
+        const result = await issue.createIssue(
+          {
+            name,
+            score,
+            description,
+            created_at: moment(created_at).toDate(),
+          },
+          accessToken,
+        );
+
+        if (!!result?.statusCode && result.statusCode !== 201) {
+          if (Array.isArray(result.message)) {
+            setErrorMessage(result.message.join(', '));
+          } else if (typeof result.message === 'string') {
+            setErrorMessage(result.message);
+          }
+        } else {
+          navigate(RoutePath.HOME);
+        }
+      } catch (error) {
+        error instanceof Error && setErrorMessage(error.message);
+      }
+    };
+
+    setIsLoading(true);
+    await promise();
+    setIsLoading(false);
+  };
 
   return (
     <Layout navigate={navigate}>
@@ -41,33 +91,43 @@ const Component: React.FC = () => {
             type="text"
             className="mt-1 mb-5 w-full rounded-lg border px-3 py-2 text-base"
             maxLength={32}
+            onChange={(e) => setName(e.target.value)}
           />
 
           <label className="block pb-1 text-base font-semibold text-gray-600">
-            Description
+            Description (optional)
           </label>
           <textarea
             className="mt-1 mb-5 w-full rounded-lg border px-3 py-2 text-base"
             maxLength={250}
+            onChange={(e) => setDescription(e.target.value)}
           />
 
           <label className="block pb-1 text-base font-semibold text-gray-600">
             Score
           </label>
           <input
+            className="mt-1 mb-5 w-full rounded-lg border px-3 py-2 text-base"
             type="number"
             max={100}
             min={0}
-            className="mt-1 mb-5 w-full rounded-lg border px-3 py-2 text-base"
+            onChange={(event) => setScore(Number(event.target.value))}
           />
 
           <label className="block pb-1 text-base font-semibold text-gray-600">
-            Date (optional)
+            Date
           </label>
           <input
             type="date"
             className="mt-1 mb-5 w-full rounded-lg border px-3 py-2 text-base"
+            onChange={(event) => setCreatedAt(event.target.value)}
           />
+
+          <ShowIf condition={!!errorMessage}>
+            <h3 className="block pb-1 text-sm font-normal text-red-600">
+              {errorMessage}
+            </h3>
+          </ShowIf>
 
           <div className="flex items-center justify-between">
             <button
@@ -79,10 +139,16 @@ const Component: React.FC = () => {
             </button>
             <button
               type="button"
-              className="mt-2 flex min-w-[105px] cursor-pointer rounded-md bg-orange-500 py-2 px-16 font-semibold text-white hover:bg-orange-600 focus:outline-none focus:ring focus:ring-orange-600 active:bg-orange-800 sm:pl-[5.5rem] sm:pr-24"
-              onClick={() => navigate(RoutePath.CREATE_ISSUE)}
+              className="mt-2 flex min-w-[105px] cursor-pointer rounded-md bg-orange-500 py-2 px-16 font-semibold text-white hover:bg-orange-600 focus:outline-none focus:ring focus:ring-orange-600 active:bg-orange-800 disabled:cursor-default disabled:bg-orange-300 sm:pl-[5.5rem] sm:pr-24"
+              onClick={handleSubmit}
+              disabled={!name || !score || !created_at || isLoading}
             >
-              Create
+              <ShowIf condition={isLoading}>
+                <div className="w-full">
+                  <Spinner />
+                </div>
+              </ShowIf>
+              <ShowIf condition={!isLoading}>Create</ShowIf>
             </button>
           </div>
         </div>

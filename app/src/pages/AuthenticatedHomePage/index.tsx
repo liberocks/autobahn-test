@@ -52,9 +52,16 @@ const Component: React.FC = () => {
   });
 
   const issues = (issuesData?.data || []) as Issue[];
-  const issuesStatistics = (issuesStatisticsData?.data ||
-    []) as IssuesStatistics[];
+  const issuesStatistics = (issuesStatisticsData || []) as IssuesStatistics[];
 
+  console.log('DEBUG issuesStatistics', issuesStatisticsData);
+
+  console.log(
+    'DEBUG todayIssuesStatistic',
+    issuesStatistics.find((issuesStatistic) =>
+      moment(issuesStatistic.date).isSame(moment(), 'day'),
+    ),
+  );
   const todayIssuesStatistic = issuesStatistics.find((issuesStatistic) =>
     moment(issuesStatistic.date).isSame(moment(), 'day'),
   );
@@ -104,7 +111,9 @@ const Component: React.FC = () => {
               <span className="text-3xl font-bold leading-none text-gray-900 sm:text-3xl">
                 {todayScore}
               </span>
-              <h3 className="text-base font-normal text-gray-500">today</h3>
+              <h3 className="text-base font-normal text-gray-500">
+                today ({todayIssuesStatistic?.total_count || 0} issues)
+              </h3>
             </div>
           </div>
         </div>
