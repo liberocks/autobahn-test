@@ -24,7 +24,7 @@ const Component: React.FC = () => {
               Email
             </label>
             <input
-              type="text"
+              type="email"
               className="mt-1 mb-5 w-full rounded-lg border px-3 py-2 text-base"
               placeholder="Input your email"
             />
