@@ -57,7 +57,7 @@ email: admin@admin.com
 password: admin
 ```
 
-# How to create a new user
+## How to create a new user
 ```
 curl -X 'POST' \
   'http://0.0.0.0:8000/auth/sign-up' \
@@ -69,3 +69,6 @@ curl -X 'POST' \
   "password": "admin"
 }'
 ```
+
+## Screenshoots
+Please go to docs directory for screenshots.
