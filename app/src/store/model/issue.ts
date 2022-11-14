@@ -10,6 +10,7 @@ export interface Issue {
 
 export interface IssuesStatistics {
   date: string;
+  name: string;
   total_count: number;
   total_score: number;
 }

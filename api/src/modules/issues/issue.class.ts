@@ -9,6 +9,6 @@ export class IssueStatistic implements IIssueStatistic {
   @ApiProperty({ type: Number })
   total_count: number;
 
-  @ApiProperty({ type: Date })
-  date: Date;
+  @ApiProperty({ type: String })
+  name: string;
 }

@@ -28,6 +28,8 @@ const Component: React.FC = () => {
         {
           page_size: 10,
           page,
+          sort_by: 'DESC',
+          order_by: 'created_at',
         },
         accessToken,
       );

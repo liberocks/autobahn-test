@@ -40,46 +40,44 @@ const Component: React.FC = () => {
     },
   });
 
-  const { data: issuesData } = useQuery({
-    queryKey: ['getIssues'],
-    queryFn: async () => {
-      const res = await issue.getIssues(
-        {
-          page_size: 6,
-          created_at_start_date: moment()
-            .subtract(1, 'day')
-            .add(timezoneOffset, 'hours')
-            .startOf('day')
-            .format('YYYY-MM-DD'),
-          created_at_end_date: moment()
-            .add(timezoneOffset, 'hours')
-            .endOf('day')
-            .format('YYYY-MM-DD'),
-        },
-        accessToken,
-      );
-      return res;
-    },
-  });
-
-  const issues = (issuesData?.data || []) as Issue[];
   const issuesStatistics = (issuesStatisticsData || []) as IssuesStatistics[];
 
-  const todayIssuesStatistic = issuesStatistics.find((issuesStatistic) =>
+  const todayIssuesStatistic = issuesStatistics.filter((issuesStatistic) =>
     moment(issuesStatistic.date).isSame(
       moment().add(timezoneOffset, 'hours'),
       'day',
     ),
   );
-  const yesterdayIssuesStatistic = issuesStatistics.find((issuesStatistic) =>
+  const yesterdayIssuesStatistic = issuesStatistics.filter((issuesStatistic) =>
     moment(issuesStatistic.date).isSame(
       moment().add(timezoneOffset, 'hours').subtract(1, 'day'),
       'day',
     ),
   );
 
-  const todayScore = todayIssuesStatistic?.total_score || 0;
-  const yesterdayScore = yesterdayIssuesStatistic?.total_score || 0;
+  const todayScore = todayIssuesStatistic.reduce(
+    (previousValue: number, issuesStatistic: IssuesStatistics) =>
+      previousValue + issuesStatistic.total_score,
+    0,
+  );
+  const yesterdayScore = yesterdayIssuesStatistic.reduce(
+    (previousValue: number, issuesStatistic: IssuesStatistics) =>
+      previousValue + issuesStatistic.total_score,
+    0,
+  );
+
+  const maxCount = Math.max(
+    1,
+    ...((todayIssuesStatistic || []) as IssuesStatistics[]).map(
+      (issue) => issue.total_count,
+    ),
+  );
+  const minCount = Math.min(
+    0,
+    ...((todayIssuesStatistic || []) as IssuesStatistics[]).map(
+      (issue) => issue.total_count,
+    ),
+  );
 
   return (
     <Layout navigate={navigate}>
@@ -120,9 +118,7 @@ const Component: React.FC = () => {
               <span className="text-3xl font-bold leading-none text-gray-900 sm:text-3xl">
                 {todayScore}
               </span>
-              <h3 className="text-base font-normal text-gray-500">
-                today ({todayIssuesStatistic?.total_count || 0} issues)
-              </h3>
+              <h3 className="text-base font-normal text-gray-500">today</h3>
             </div>
           </div>
         </div>
@@ -201,7 +197,7 @@ const Component: React.FC = () => {
                   Issues
                 </h2>
                 <p className="mb-2 text-base text-gray-600">
-                  Recent issues score
+                  Today issues count
                 </p>
               </div>
 
@@ -218,28 +214,33 @@ const Component: React.FC = () => {
               </div>
             </div>
 
-            <ShowIf condition={issues.length === 0}>
-              <div className="text-gray-500">No issues recently</div>
+            <ShowIf condition={todayIssuesStatistic.length === 0}>
+              <div className="text-gray-500">No issues today</div>
             </ShowIf>
-            <ShowIf condition={issues.length > 0}>
+            <ShowIf condition={todayIssuesStatistic.length > 0}>
               <div className="relative my-8 min-h-[450px]">
                 <div className="mx-2 mb-2 flex items-end">
-                  {issues.map((issue) => {
-                    const color = colorScale(issue.score, 0, 100);
+                  {todayIssuesStatistic.map((issuesStatistic) => {
+                    const color = colorScale(
+                      issuesStatistic.total_count,
+                      minCount,
+                      maxCount,
+                    );
                     return (
                       <div
                         className="w-1/6 px-2"
-                        key={`issue-score-${issue.id}`}
+                        key={`issue-score-${issuesStatistic.name}-${issuesStatistic.date}`}
                       >
                         <div
                           className="relative max-h-[450px]"
                           style={{
-                            height: (issue.score / 100) * 450,
+                            height:
+                              (issuesStatistic.total_count / maxCount) * 450,
                             background: `linear-gradient(0deg, ${color}55 0%, ${color} 100%)`,
                           }}
                         >
                           <div className="absolute inset-x-0 top-0 -mt-6 text-center text-sm text-gray-800">
-                            {issue.score}
+                            {issuesStatistic.total_count}
                           </div>
                         </div>
                       </div>
@@ -249,13 +250,16 @@ const Component: React.FC = () => {
 
                 <div className="mx-auto border-t border-gray-400" />
                 <div className="-mx-2 flex items-end">
-                  {issues.map((issue) => {
+                  {todayIssuesStatistic.map((issuesStatistic) => {
                     return (
-                      <div className="w-1/6 px-2" key={`issue-bar-${issue.id}`}>
+                      <div
+                        className="w-1/6 px-2"
+                        key={`issue-bar-${issuesStatistic.name}-${issuesStatistic.date}`}
+                      >
                         <div className="relative bg-orange-600">
                           <div className="absolute inset-x-0 top-0 mx-auto -mt-px h-2 w-[1px] bg-gray-400 text-center" />
                           <div className="absolute inset-x-0 top-0 mt-3 text-center text-sm text-gray-700">
-                            {issue.name}
+                            {issuesStatistic.name}
                           </div>
                         </div>
                       </div>

@@ -84,13 +84,14 @@ export class IssueRepository implements Repository<IIssue> {
 
     return this.baseRepository.Model.findAll({
       attributes: [
+        'name',
         [Sequelize.fn('DATE', Sequelize.col('created_at')), 'date'],
         [Sequelize.fn('COUNT', 1), 'total_count'],
         [Sequelize.fn('SUM', Sequelize.col('score')), 'total_score'],
       ],
-      group: [Sequelize.fn('DATE', Sequelize.col('created_at')), 'date'],
+      group: [Sequelize.col('name'), Sequelize.col('date')],
       where,
-      order: [['date', 'ASC']],
+      order: [['name', 'ASC']],
     });
   }
 }

@@ -16,5 +16,5 @@ export interface IssueRangeQuery {
 export interface IIssueStatistic {
   total_score: number;
   total_count: number;
-  date: Date;
+  name: string;
 }
