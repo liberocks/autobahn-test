@@ -1,4 +1,4 @@
-FROM node:18-alpine AS build
+FROM node:14-alpine AS build
 
 WORKDIR /usr/src/app
 
@@ -19,7 +19,7 @@ RUN npm ci --only=production && npm cache clean --force
 
 USER node
 
-FROM node:18-alpine AS production
+FROM node:14-alpine AS production
 
 # Copy the bundled code from the build stage to the production image
 COPY --chown=node:node --from=build /usr/src/app/node_modules ./node_modules
