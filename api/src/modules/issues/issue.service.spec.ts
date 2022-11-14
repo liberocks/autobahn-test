@@ -31,17 +31,15 @@ describe('Issue service', () => {
 
   describe('create', () => {
     it('should create an issue', async () => {
-      jest.spyOn(issueRepository, 'create').mockResolvedValue({
-        name: 'name',
-        description: 'description',
-        score: 90,
-      });
-      const result = await service.create({});
+      const payload = { name: 'name', description: 'description', score: 90 };
+
+      jest.spyOn(issueRepository, 'create').mockResolvedValue(payload);
+      const result = await service.create(payload);
 
       expect(result).toBeDefined();
-      expect(result.name).toEqual('name');
-      expect(result.description).toEqual('description');
-      expect(result.score).toEqual(90);
+      expect(result.name).toEqual(payload.name);
+      expect(result.description).toEqual(payload.description);
+      expect(result.score).toEqual(payload.score);
     });
   });
 });

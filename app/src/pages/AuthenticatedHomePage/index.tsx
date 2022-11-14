@@ -8,7 +8,7 @@ import issue from '../../store/query/issue';
 import { Layout } from '../../components/Layout';
 import { RoutePath } from '../../route';
 import { accessTokenAtom } from '../../store/atom/accessToken.atom';
-import { Issue, IssuesStatistics } from '../../store/model/issue';
+import { IssuesStatistics } from '../../store/model/issue';
 import { colorScale } from '../../common/colorScale';
 import { ShowIf } from '../../components/ShowIf';
 import { timezoneOffsetState } from '../../store/selector/timezoneOffset.selector';
@@ -24,7 +24,7 @@ const Component: React.FC = () => {
       const res = await issue.getIssuesStatistics(
         {
           created_at_start_date: moment()
-            .subtract(1, 'day')
+            .subtract(2, 'day')
             .add(timezoneOffset, 'hours')
             .startOf('day')
             .format('YYYY-MM-DD'),
@@ -44,13 +44,13 @@ const Component: React.FC = () => {
 
   const todayIssuesStatistic = issuesStatistics.filter((issuesStatistic) =>
     moment(issuesStatistic.date).isSame(
-      moment().add(timezoneOffset, 'hours'),
+      moment(),
       'day',
     ),
   );
   const yesterdayIssuesStatistic = issuesStatistics.filter((issuesStatistic) =>
     moment(issuesStatistic.date).isSame(
-      moment().add(timezoneOffset, 'hours').subtract(1, 'day'),
+      moment().subtract(1,'day'),
       'day',
     ),
   );
