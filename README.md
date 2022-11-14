@@ -23,7 +23,8 @@
 - Issue list page
 
 ## Endpoints
-- `GET /` : index endpoint for health check
+- `GET /`: index endpoint for health check
+- `GET /docs`: swagger api documentation
 - `POST /auth/sign-up`: to register new user
 - `POST /auth/sign-in`: to log-in as a user
 - `GET /auth/profile`: to demonstrate the JWT endpoint guard 
