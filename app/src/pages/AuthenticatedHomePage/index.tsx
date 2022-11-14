@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
 
@@ -21,7 +21,7 @@ const Component: React.FC = () => {
     queryFn: async () => {
       const res = await issue.getIssues(
         {
-          page_size: 100,
+          page_size: 6,
           created_at_start_date: moment()
             .subtract(1, 'day')
             .startOf('day')
@@ -34,20 +34,20 @@ const Component: React.FC = () => {
     },
   });
 
-  const issues = data?.data || [];
-  const todayIssues = issues.filter((issue: Issue) =>
+  const issues = (data?.data || []) as Issue[];
+  const todayIssues = issues.filter((issue) =>
     moment(issue.created_at).isSame(moment(), 'day'),
   );
   const todayScore = todayIssues.reduce(
-    (acc: number, issue: Issue) => acc + issue.score,
+    (acc: number, issue) => acc + issue.score,
     0,
   );
 
-  const yesterdayIssues = issues.filter((issue: Issue) =>
+  const yesterdayIssues = issues.filter((issue) =>
     moment(issue.created_at).isSame(moment().subtract(1, 'day'), 'day'),
   );
   const yesterdayScore = yesterdayIssues.reduce(
-    (acc: number, issue: Issue) => acc + issue.score,
+    (acc: number, issue) => acc + issue.score,
     0,
   );
 
@@ -167,7 +167,7 @@ const Component: React.FC = () => {
                   Issues
                 </h2>
                 <p className="mb-2 text-base text-gray-600">
-                  Latest issues score
+                  Recent issues score
                 </p>
               </div>
 
@@ -185,12 +185,12 @@ const Component: React.FC = () => {
             </div>
 
             <ShowIf condition={issues.length === 0}>
-              <div className="text-gray-500">No issues</div>
+              <div className="text-gray-500">No issues recently</div>
             </ShowIf>
             <ShowIf condition={issues.length > 0}>
               <div className="relative my-8 min-h-[450px]">
                 <div className="mx-2 mb-2 flex items-end">
-                  {issues.map((issue: Issue) => {
+                  {issues.map((issue) => {
                     const color = colorScale(issue.score, 0, 100);
                     return (
                       <div
@@ -215,7 +215,7 @@ const Component: React.FC = () => {
 
                 <div className="mx-auto border-t border-gray-400" />
                 <div className="-mx-2 flex items-end">
-                  {issues.map((issue: Issue) => {
+                  {issues.map((issue) => {
                     return (
                       <div className="w-1/6 px-2" key={`issue-bar-${issue.id}`}>
                         <div className="relative bg-orange-600">

@@ -74,7 +74,7 @@ const Component: React.FC = () => {
               Password
             </label>
             <input
-              type="text"
+              type="password"
               className="mt-1 mb-5 w-full rounded-lg border px-3 py-2 text-base"
               placeholder="Input your password"
               onChange={(event) => setPassword(event.target.value)}

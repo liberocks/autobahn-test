@@ -4,6 +4,7 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import { RoutePath } from '../route';
 import { accessTokenAtom } from '../store/atom/accessToken.atom';
+import { expiryState } from '../store/selector/expiry.selector';
 import { userState } from '../store/selector/user.selector';
 
 interface LayoutProps {
@@ -14,6 +15,7 @@ export const Layout: React.FC<LayoutProps> = (props) => {
   const { children, navigate } = props;
 
   const user = useRecoilValue(userState);
+  const isExpired = useRecoilValue(expiryState);
   const setAccessToken = useSetRecoilState(accessTokenAtom);
 
   const handleLogout = () => {
@@ -24,7 +26,10 @@ export const Layout: React.FC<LayoutProps> = (props) => {
   };
 
   useEffect(() => {
-    if (!user) {
+    if (!user || isExpired) {
+      localStorage.removeItem('access_token');
+      setAccessToken(null);
+
       navigate(RoutePath.HOME, {
         state: { error: 'You must sign in to access this page.' },
       });
