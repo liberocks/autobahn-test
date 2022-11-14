@@ -45,6 +45,12 @@ npm install
 npm run seed
 ```
 
+## How to run unit tests
+```
+cd api
+npm run test
+```
+
 ## Seeded user
 ```
 email: admin@admin.com

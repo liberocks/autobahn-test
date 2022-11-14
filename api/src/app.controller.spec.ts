@@ -16,7 +16,6 @@ describe('AppController', () => {
 
   describe('root', () => {
     it('should return "Hello World!"', () => {
-      // create regex that check the sting containing welcome
       expect(appController.healthCheck()).toContain('Welcome');
     });
   });
