@@ -40,6 +40,21 @@ services:
       - db
     volumes:
       - ./:/src
+  app:
+    container_name: app
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    image: dashboard-app
+    ports:
+      - 3000:80
+    environment:
+      REACT_APP_API_URL: http://0.0.0.0:8000
+      REACT_APP_TIMEZONE_OFFSET: 7
+    links:
+      - db
+    volumes:
+      - ./:/src
 volumes:
   db:
     driver: local
