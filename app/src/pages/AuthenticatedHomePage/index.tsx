@@ -8,7 +8,7 @@ import { Layout } from '../../components/Layout';
 import { RoutePath } from '../../route';
 import { useRecoilValue } from 'recoil';
 import { accessTokenAtom } from '../../store/atom/accessToken.atom';
-import { Issue } from '../../store/model/issue';
+import { Issue, IssuesStatistics } from '../../store/model/issue';
 import { colorScale } from '../../common/colorScale';
 import { ShowIf } from '../../components/ShowIf';
 
@@ -16,7 +16,24 @@ const Component: React.FC = () => {
   const navigate = useNavigate();
   const accessToken = useRecoilValue(accessTokenAtom);
 
-  const { data } = useQuery({
+  const { data: issuesStatisticsData } = useQuery({
+    queryKey: ['getIssuesStatistics'],
+    queryFn: async () => {
+      const res = await issue.getIssuesStatistics(
+        {
+          // created_at_start_date: moment()
+          //   .subtract(1, 'day')
+          //   .startOf('day')
+          //   .format('YYYY-MM-DD'),
+          // created_at_end_date: moment().endOf('day').format('YYYY-MM-DD'),
+        },
+        accessToken,
+      );
+      return res;
+    },
+  });
+
+  const { data: issuesData } = useQuery({
     queryKey: ['getIssues'],
     queryFn: async () => {
       const res = await issue.getIssues(
@@ -34,22 +51,19 @@ const Component: React.FC = () => {
     },
   });
 
-  const issues = (data?.data || []) as Issue[];
-  const todayIssues = issues.filter((issue) =>
-    moment(issue.created_at).isSame(moment(), 'day'),
+  const issues = (issuesData?.data || []) as Issue[];
+  const issuesStatistics = (issuesStatisticsData?.data ||
+    []) as IssuesStatistics[];
+
+  const todayIssuesStatistic = issuesStatistics.find((issuesStatistic) =>
+    moment(issuesStatistic.date).isSame(moment(), 'day'),
   );
-  const todayScore = todayIssues.reduce(
-    (acc: number, issue) => acc + issue.score,
-    0,
+  const yesterdayIssuesStatistic = issuesStatistics.find((issuesStatistic) =>
+    moment(issuesStatistic.date).isSame(moment().subtract(1, 'day'), 'day'),
   );
 
-  const yesterdayIssues = issues.filter((issue) =>
-    moment(issue.created_at).isSame(moment().subtract(1, 'day'), 'day'),
-  );
-  const yesterdayScore = yesterdayIssues.reduce(
-    (acc: number, issue) => acc + issue.score,
-    0,
-  );
+  const todayScore = todayIssuesStatistic?.total_score || 0;
+  const yesterdayScore = yesterdayIssuesStatistic?.total_score || 0;
 
   return (
     <Layout navigate={navigate}>

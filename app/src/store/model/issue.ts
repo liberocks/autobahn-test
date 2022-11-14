@@ -7,3 +7,9 @@ export interface Issue {
   updated_at: Date;
   deleted_at?: Date;
 }
+
+export interface IssuesStatistics {
+  date: string;
+  total_count: number;
+  total_score: number;
+}
