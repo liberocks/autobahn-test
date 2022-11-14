@@ -3,15 +3,15 @@ import moment from 'moment';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
-import { PaginationMeta } from '../../common/pagination';
 
+import { PaginationMeta } from '../../common/pagination';
 import { Layout } from '../../components/Layout';
 import { ShowIf } from '../../components/ShowIf';
 import { RoutePath } from '../../route';
 import { accessTokenAtom } from '../../store/atom/accessToken.atom';
-
 import { Issue } from '../../store/model/issue';
 import issue from '../../store/query/issue';
+import { timezoneOffsetState } from '../../store/selector/timezoneOffset.selector';
 
 import './issue.css';
 
@@ -19,8 +19,7 @@ const Component: React.FC = () => {
   const [page, setPage] = useState(1);
   const navigate = useNavigate();
   const accessToken = useRecoilValue(accessTokenAtom);
-
-  console.log('page', page);
+  const timezoneOffset = useRecoilValue(timezoneOffsetState);
 
   const { data } = useQuery({
     queryKey: ['getIssues', page],
@@ -126,7 +125,9 @@ const Component: React.FC = () => {
                       </td>
                       <td className="p-4">{issue.score}</td>
                       <td className="p-4">
-                        {moment(issue.created_at).format('DD MMM YYYY')}
+                        {moment(issue.created_at)
+                          .add(timezoneOffset, 'hours')
+                          .format('DD MMM YYYY')}
                       </td>
                     </tr>
                   ))}

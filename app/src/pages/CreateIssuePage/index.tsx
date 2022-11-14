@@ -9,6 +9,7 @@ import { Spinner } from '../../components/Spinner';
 import { RoutePath } from '../../route';
 import { accessTokenAtom } from '../../store/atom/accessToken.atom';
 import issue from '../../store/query/issue';
+import { timezoneOffsetState } from '../../store/selector/timezoneOffset.selector';
 
 const Component: React.FC = () => {
   const [name, setName] = useState('');
@@ -18,6 +19,7 @@ const Component: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const accessToken = useRecoilValue(accessTokenAtom);
+  const timezoneOffset = useRecoilValue(timezoneOffsetState);
 
   const navigate = useNavigate();
 
@@ -33,7 +35,9 @@ const Component: React.FC = () => {
             name,
             score,
             description,
-            created_at: moment(created_at).toDate(),
+            created_at: moment(created_at)
+              .add(timezoneOffset, 'hours')
+              .toDate(),
           },
           accessToken,
         );

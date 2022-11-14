@@ -2,30 +2,37 @@ import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
+import { useRecoilValue } from 'recoil';
 
 import issue from '../../store/query/issue';
 import { Layout } from '../../components/Layout';
 import { RoutePath } from '../../route';
-import { useRecoilValue } from 'recoil';
 import { accessTokenAtom } from '../../store/atom/accessToken.atom';
 import { Issue, IssuesStatistics } from '../../store/model/issue';
 import { colorScale } from '../../common/colorScale';
 import { ShowIf } from '../../components/ShowIf';
+import { timezoneOffsetState } from '../../store/selector/timezoneOffset.selector';
 
 const Component: React.FC = () => {
   const navigate = useNavigate();
   const accessToken = useRecoilValue(accessTokenAtom);
+  const timezoneOffset = useRecoilValue(timezoneOffsetState);
 
   const { data: issuesStatisticsData } = useQuery({
     queryKey: ['getIssuesStatistics'],
     queryFn: async () => {
       const res = await issue.getIssuesStatistics(
         {
-          // created_at_start_date: moment()
-          //   .subtract(1, 'day')
-          //   .startOf('day')
-          //   .format('YYYY-MM-DD'),
-          // created_at_end_date: moment().endOf('day').format('YYYY-MM-DD'),
+          created_at_start_date: moment()
+            .subtract(1, 'day')
+            .add(timezoneOffset, 'hours')
+            .startOf('day')
+            .format('YYYY-MM-DD'),
+          created_at_end_date: moment()
+            .add(timezoneOffset, 'hours')
+            .add(1, 'day')
+            .endOf('day')
+            .format('YYYY-MM-DD'),
         },
         accessToken,
       );
@@ -41,9 +48,13 @@ const Component: React.FC = () => {
           page_size: 6,
           created_at_start_date: moment()
             .subtract(1, 'day')
+            .add(timezoneOffset, 'hours')
             .startOf('day')
             .format('YYYY-MM-DD'),
-          created_at_end_date: moment().endOf('day').format('YYYY-MM-DD'),
+          created_at_end_date: moment()
+            .add(timezoneOffset, 'hours')
+            .endOf('day')
+            .format('YYYY-MM-DD'),
         },
         accessToken,
       );
@@ -54,19 +65,17 @@ const Component: React.FC = () => {
   const issues = (issuesData?.data || []) as Issue[];
   const issuesStatistics = (issuesStatisticsData || []) as IssuesStatistics[];
 
-  console.log('DEBUG issuesStatistics', issuesStatisticsData);
-
-  console.log(
-    'DEBUG todayIssuesStatistic',
-    issuesStatistics.find((issuesStatistic) =>
-      moment(issuesStatistic.date).isSame(moment(), 'day'),
+  const todayIssuesStatistic = issuesStatistics.find((issuesStatistic) =>
+    moment(issuesStatistic.date).isSame(
+      moment().add(timezoneOffset, 'hours'),
+      'day',
     ),
   );
-  const todayIssuesStatistic = issuesStatistics.find((issuesStatistic) =>
-    moment(issuesStatistic.date).isSame(moment(), 'day'),
-  );
   const yesterdayIssuesStatistic = issuesStatistics.find((issuesStatistic) =>
-    moment(issuesStatistic.date).isSame(moment().subtract(1, 'day'), 'day'),
+    moment(issuesStatistic.date).isSame(
+      moment().add(timezoneOffset, 'hours').subtract(1, 'day'),
+      'day',
+    ),
   );
 
   const todayScore = todayIssuesStatistic?.total_score || 0;
@@ -124,8 +133,10 @@ const Component: React.FC = () => {
           <div className="flex items-center">
             <div className="shrink-0">
               <span className="text-3xl font-bold leading-none text-gray-900 sm:text-3xl">
-                {((todayScore - yesterdayScore) / (yesterdayScore || 1)) *
-                  100.0}
+                {(
+                  ((todayScore - yesterdayScore) / (yesterdayScore || 1)) *
+                  100.0
+                ).toFixed(2)}
                 %
               </span>
               <h3 className="text-base font-normal text-gray-500">

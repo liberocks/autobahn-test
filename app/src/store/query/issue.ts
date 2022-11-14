@@ -49,9 +49,6 @@ export default {
       throw new UnauthorizedError('Access token is required.');
     }
 
-    console.log('DEBUG params', params);
-    console.log('DEBUG qs', paramsToQueryString(params as Params));
-
     const uri = `${process.env.REACT_APP_API_URL}/${ISSUE_PATH}?${
       !isEmpty(params) ? paramsToQueryString(params as Params) : ''
     }`;
