@@ -22,7 +22,7 @@ export const userState = selector({
           name: jwtPayload.name,
           id: jwtPayload.sub,
         };
-      } catch {
+      } catch (error) {
         result = null;
       }
     }

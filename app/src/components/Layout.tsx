@@ -1,6 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { NavigateFunction } from 'react-router-dom';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+
 import { RoutePath } from '../route';
+import { accessTokenAtom } from '../store/atom/accessToken.atom';
+import { userState } from '../store/selector/user.selector';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -9,11 +13,23 @@ interface LayoutProps {
 export const Layout: React.FC<LayoutProps> = (props) => {
   const { children, navigate } = props;
 
-  const handleLogout = () => {
-    // TODO: logout workflow
+  const user = useRecoilValue(userState);
+  const setAccessToken = useSetRecoilState(accessTokenAtom);
 
-    navigate(RoutePath.SIGN_IN);
+  const handleLogout = () => {
+    localStorage.removeItem('access_token');
+    setAccessToken(null);
+
+    navigate(RoutePath.HOME);
   };
+
+  useEffect(() => {
+    if (!user) {
+      navigate(RoutePath.HOME, {
+        state: { error: 'You must sign in to access this page.' },
+      });
+    }
+  }, []);
 
   return (
     <div className="flex overflow-hidden">
